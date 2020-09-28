@@ -1,24 +1,27 @@
 import math
 
+
 class Shape:
     def __init__(self, length, breadth):
         self.length = length
         self.breadth = breadth
         self.area = length*breadth
 
+
 class Rectangle(Shape):
     def __init__(self, length, breadth):
-        super().__init__(length,breadth)
+        super().__init__(length, breadth)
+
 
 class Square(Shape):
     def __init__(self, length):
-        super().__init__(length,length)
+        super().__init__(length, length)
 
 
 class Circle(Shape):
     def __init__(self, radius):
-        super().__init__(radius,radius*math.pi)
-        #self.area = math.pi*self.area
+        super().__init__(radius, radius*math.pi)
+        # self.area = math.pi*self.area
 
 
 choice = 1

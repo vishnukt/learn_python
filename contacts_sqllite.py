@@ -1,7 +1,8 @@
 import sqlite3
 
 db = sqlite3.connect("contact.sqlite")
-db.execute("CREATE TABLE IF NOT EXISTS phonebook(name TEXT,number INTEGER)")
+c = db.cursor()
+c.execute("CREATE TABLE IF NOT EXISTS phonebook(name TEXT,number INTEGER)")
 
 choice = 1
 while choice != 3:
@@ -12,12 +13,18 @@ while choice != 3:
     if choice == 1:
         name = input("Enter Name : ")
         number = input("Enter Number : ")
-        db.execute("INSERT INTO phonebook VALUES(?, ?)", (name, number))
+        c.execute("INSERT INTO phonebook VALUES(?, ?)", (name, number))
         print("Contact Inserted Successfully")
     elif choice == 2:
-        curs = db.cursor()
-        curs.execute("SELECT * FROM phonebook")
+        c.execute("SELECT * FROM phonebook")
         print("\nNAME\tNUMBER")
-        for name, number in curs:
+        for name, number in c:
             print(name, "\t", number)
+    elif choice == 3:
+        db.commit()
+        db.close()
+        exit()
+    else:
+        print("Invalid Option!!!")
+db.commit()
 db.close()

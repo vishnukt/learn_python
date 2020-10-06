@@ -1,0 +1,10 @@
+{% if qlist%}
+    {% for question in qlist %}
+        <h1>{{ question.question_text }}</h1>
+        {% for choice in question.choice_set.all %}
+            <li>{{ choice.choice_text }} -- {{ choice.votes }} vote{{ choice.votes|pluralize }}</li>
+        {% endfor %}
+    {% endfor %}
+{% else %}
+    <p>Empty Polls</p>
+{% endif %}

@@ -2,21 +2,24 @@
 
 # Create your views here.
 
-from django.http import HttpResponse, HttpResponseRedirect
+# from django.http import HttpResponse
+
+from django.http import HttpResponseRedirect
 
 from .models import Question, Choice
 
 from django.urls import reverse
 
-from django.template import loader
+# from django.template import loader
 
 from django.shortcuts import render, get_object_or_404
 
-from django.http import Http404
+# from django.http import Http404
 
 from django.views import generic
 
 from django.utils import timezone
+
 
 class IndexView(generic.ListView):
     template_name = 'polls/index.html'
@@ -24,15 +27,11 @@ class IndexView(generic.ListView):
 
     def get_queryset(self):
         """Return the last five published questions."""
-        return Question.objects.order_by('-pub_date')[:5]
+        # return Question.objects.order_by('-pub_date')[:5]
+        return Question.objects.all()
 
-
-'''class DetailView(generic.DetailView):
-    model = Question
-    template_name = 'polls/detail.html'''
 
 class DetailView(generic.DetailView):
-    ...
     def get_queryset(self):
         """
         Excludes any questions that aren't published yet.
@@ -45,47 +44,15 @@ class ResultsView(generic.DetailView):
     template_name = 'polls/results.html'
 
 
-'''
-def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
+class all_results(generic.ListView):
+    # model = Question
+    template_name = 'polls/all_results.html'
+    context_object_name = 'qlist'
 
-
-
-def index(request):
-    latest_question_list = Question.objects.order_by('-pub_date')[:5]
-    output = ', '.join([q.question_text for q in latest_question_list])
-    return HttpResponse(output)
-
-'''
-
-
-'''def index(request):
-    latest_question_list = Question.objects.order_by('-pub_date')[:5]
-    context = {'latest_question_list': latest_question_list}
-    return render(request, 'polls/index.html', context)'''
-
-
-def index(request):
-    latest_question_list = Question.objects.order_by('-pub_date')[:5]
-    output = ', '.join([q.question_text for q in latest_question_list])
-    return HttpResponse(output)
-
-#def detail(request, question_id):
-    #return HttpResponse("You're looking at question %s." % question_id)
-
-
-# def results(request, question_id):
-#    response = "You're looking at the results of question %s."
-#    return HttpResponse(response % question_id)
-
-
-def results(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    return render(request, 'polls/results.html', {'question': question})
-
-
-# def vote(request, question_id):
-#    return HttpResponse("You're voting on question %s." % question_id)
+    def get_queryset(self):
+        """Return the last five published questions."""
+        # return Question.objects.order_by('-pub_date')[:5]
+        return Question.objects.all()
 
 
 def vote(request, question_id):
@@ -94,7 +61,7 @@ def vote(request, question_id):
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
         # Redisplay the question voting form.
-        return render(request, 'polls/detail.html', {
+        return render(request, 'polls/question_detail.html', {
             'question': question,
             'error_message': "You didn't select a choice.",
         })
@@ -107,16 +74,16 @@ def vote(request, question_id):
         return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
 
 
-def detail(request, question_id):
+'''def index(request):
+    latest_question_list = Question.objects.order_by('-pub_date')[:5]
+    output = ', '.join([q.question_text for q in latest_question_list])
+    return HttpResponse(output)'''
+
+
+'''def results(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
-    return render(request, 'polls/detail.html', {'question': question})
+    return render(request, 'polls/results.html', {'question': question})'''
 
-
-def get_queryset(self):
-    """
-    Return the last five published questions (not including those set to be
-    published in the future).
-    """
-    return Question.objects.filter(
-        pub_date__lte=timezone.now()
-    ).order_by('-pub_date')[:5]
+'''def detail(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    return render(request, 'polls/question_detail.html', {'question': question})'''

@@ -20,18 +20,27 @@ from django.views import generic
 
 from django.utils import timezone
 
+# from django.contrib.auth.forms import UserCreationForm
 
-class IndexView(generic.ListView):
+# from django import forms
+
+from django.contrib.auth.decorators import login_required
+
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+
+class IndexView(LoginRequiredMixin, generic.ListView):
+    model = Question
     template_name = 'polls/index.html'
     context_object_name = 'latest_question_list'
 
-    def get_queryset(self):
+    '''def get_queryset(self):
         """Return the last five published questions."""
         # return Question.objects.order_by('-pub_date')[:5]
-        return Question.objects.all()
+        return Question.objects.all()'''
 
 
-class DetailView(generic.DetailView):
+class DetailView(LoginRequiredMixin, generic.DetailView):
     def get_queryset(self):
         """
         Excludes any questions that aren't published yet.
@@ -39,12 +48,12 @@ class DetailView(generic.DetailView):
         return Question.objects.filter(pub_date__lte=timezone.now())
 
 
-class ResultsView(generic.DetailView):
+class ResultsView(LoginRequiredMixin, generic.DetailView):
     model = Question
     template_name = 'polls/results.html'
 
 
-class all_results(generic.ListView):
+class all_results(LoginRequiredMixin, generic.ListView):
     # model = Question
     template_name = 'polls/all_results.html'
     context_object_name = 'qlist'
@@ -53,6 +62,11 @@ class all_results(generic.ListView):
         return Question.objects.all()
 
 
+# class registeration(generic.DetailView):
+#     model = Question
+#     template_name = 'polls/registeration.html'
+
+@login_required
 def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
     try:

@@ -1,3 +1,4 @@
 *.xlsx
 *.sqlite
 *.sqlite3
+*.pyc

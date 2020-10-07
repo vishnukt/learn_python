@@ -2,5 +2,6 @@
     "python.pythonPath": "poll_django/bin/python",
     "python.linting.pylintEnabled": false,
     "python.linting.flake8Enabled": true,
-    "python.linting.enabled": true
+    "python.linting.enabled": true,
+    "python.linting.flake8Args": ["--disable={line too long (91 > 79 characters)}"]
 }

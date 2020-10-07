@@ -1,3 +1,4 @@
+<h1>ALL POLL RESULTS</h1>
 {% if qlist%}
     {% for question in qlist %}
         <h1>{{ question.question_text }}</h1>
@@ -8,3 +9,5 @@
 {% else %}
     <p>Empty Polls</p>
 {% endif %}
+<br>
+<a href="{% url 'polls:index'%}">Back to home</a>

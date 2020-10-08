@@ -1,0 +1,8 @@
+<h1>User Details</h1>
+{%if userdata%}
+    {% for user in userdata %}
+        <li>Full Name : {{user.full_name}}</li>
+    {% endfor %}
+{% else %}
+    <p>Empty</p>
+{% endif %}

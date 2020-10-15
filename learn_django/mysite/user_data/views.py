@@ -16,6 +16,8 @@ from django.contrib.auth.decorators import login_required
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+from django.forms import ModelForm
+
 
 # Create your views here.
 
@@ -32,25 +34,28 @@ class view_details(LoginRequiredMixin, generic.ListView):
     context_object_name = 'userdata'
     template_name = 'user_data/view_details.html'
     def get_queryset(self):
+        # return data of the current logged user
         return user_data.objects.filter(user=self.request.user)
+        # return user_data.objects.all()
 
 @login_required
 def get_name(request):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
-        form = user_details(request.POST, request.user)
+        form = user_details(request.POST)
         # check whether it's valid:
         if form.is_valid():
             # process the data in form.cleaned_data as required
             # ...
             # redirect to a new URL:
-            n = form.cleaned_data['name']
+            '''n = form.cleaned_data['name']
             t = form.cleaned_data['town']
             a = form.cleaned_data['age']
             u = user_data(full_name=n, home_town=t, age=a)
             u.user = request.user
-            u.save()
+            u.save()'''
+            form.save()
             messages.success(request, ('User Details Updated'))
             return HttpResponseRedirect('/user_data/')
 

@@ -1,8 +1,13 @@
 <h1>User Details</h1>
 {%if userdata%}
-    {% for user in userdata %}
-        <li>Full Name : {{user.full_name}}</li>
-    {% endfor %}
+    {% for x in userdata%}
+        <li>Full Name : {{x.full_name}}</li>
+        <ul>
+            <li> Home Town : {{x.home_town}}</li>
+            <li>Age : {{x.age}}</li>
+        </ul>
+    {% endfor %}    
 {% else %}
     <p>Empty</p>
 {% endif %}
+<a href="{% url 'user_data:index'%}">&lt&lt Back</a>

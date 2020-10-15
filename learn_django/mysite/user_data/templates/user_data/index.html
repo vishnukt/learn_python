@@ -1,4 +1,4 @@
-<h1>Welcome</h1>
+<h1>Welcome {{request.user}}</h1>
 <a href="{% url 'user_data:input'%}">Enter User Details</a>
 <br>
 <a href="{% url 'user_data:view'%}">View User Details</a>

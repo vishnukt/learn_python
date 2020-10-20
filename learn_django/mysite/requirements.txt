@@ -1,10 +1,12 @@
 asgiref==3.2.10
 astroid==2.4.2
 Django==3.1.1
+djangorestframework==3.12.1
 flake8==3.8.4
 importlib-metadata==2.0.0
 isort==5.5.4
 lazy-object-proxy==1.4.3
+Markdown==3.3.1
 mccabe==0.6.1
 pycodestyle==2.6.0
 pyflakes==2.2.0

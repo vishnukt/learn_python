@@ -21,7 +21,7 @@ from rest_framework import routers
 
 from restapi import views
 
-from django.conf.urls import url
+# from django.conf.urls import url
 
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
@@ -35,7 +35,7 @@ urlpatterns = [
     path('polls/accounts/', include('django.contrib.auth.urls')),
     # url(r"^polls/accounts/", include("django.contrib.auth.urls")),
     # url(r'^restapi/', include(restapi.urls, namespace="restapi")),
-    path('restapi/', include('restapi.urls')),
+    # path('restapi/', include('restapi.urls')),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('restapi/test/', include(router.urls)),
 ]

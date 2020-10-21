@@ -13,6 +13,7 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         model = Group
         fields = ['url', 'name']
 
+
 class UserModel(serializers.Serializer):
     full_name = serializers.CharField(max_length=200)
     home_town = serializers.CharField(max_length=200)

@@ -80,15 +80,18 @@ class UserDataView(viewsets.ModelViewSet):
 
 
 class UserDataApiView(APIView):
-    queryset = user_data.objects.all().values()
+    queryset = user_data.objects.all()
     serializer_class = UserModelSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, format=None, pk=None):
-        if pk is None:
-            return Response({self.queryset.all()})
-        else:
-            return Response({self.queryset.filter(pk=pk)})
+        queryset = user_data.objects.all()
+        serializer_class = UserModelSerializer(queryset, many=True)
+        return Response(serializer_class.data)
+        # if pk is None:
+        #     return Response({self.queryset.all()})
+        # else:
+        #     return Response({self.queryset.filter(pk=pk)})
 
     def post(self, request, pk=None):
         serializer = self.serializer_class(data=request.data)
@@ -107,47 +110,49 @@ class UserDataApiView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+
+class UserDataPutApiView(APIView):
+    queryset = user_data.objects.all()
+    serializer_class = UserModelSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, format=None, pk=None):
+        queryset = user_data.objects.filter(pk=pk)
+        serializer_class = UserModelSerializer(queryset, many=True)
+        return Response(serializer_class.data)                
+
     def put(self, request, pk=None):
         serializer = self.serializer_class(data=request.data)
-        if pk is not None:
-            if serializer.is_valid():
-                n = serializer.validated_data.get('full_name')
-                t = serializer.validated_data.get('home_town')
-                a = serializer.validated_data.get('age')
-                # u = user_data(full_name=n, home_town=t, age=a)
-                user_data.objects.filter(id=pk).update(full_name=n, home_town=t, age=a)
-                message = 'Data Succesfully Updated!'
-                return Response({'message': message})
-            else:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if serializer.is_valid():
+            n = serializer.validated_data.get('full_name')
+            t = serializer.validated_data.get('home_town')
+            a = serializer.validated_data.get('age')
+            # u = user_data(full_name=n, home_town=t, age=a)
+            user_data.objects.filter(id=pk).update(full_name=n, home_town=t, age=a)
+            message = 'Data Succesfully Updated!'
+            return Response({'message': message})
         else:
-            return Response({'Failed! : Select only a specific data'})
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def patch(self, request, pk=None):
         serializer = self.serializer_class(data=request.data)
-        if pk is not None:
-            if serializer.is_valid():
-                n = serializer.validated_data.get('full_name')
-                t = serializer.validated_data.get('home_town')
-                a = serializer.validated_data.get('age')
-                # u = user_data(full_name=n, home_town=t, age=a)
-                if n is None:
-                    n = self.queryset.filter(pk=pk).values('full_name')
-                if t is None:
-                    t = self.queryset.filter(pk=pk).values('home_town')
-                if a is None:
-                    a = self.queryset.filter(pk=pk).values('age')
-                user_data.objects.filter(id=pk).update(full_name=n, home_town=t, age=a)
-                message = 'Data Succesfully Updated!'
-                return Response({'message': message})
-            else:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if serializer.is_valid():
+            n = serializer.validated_data.get('full_name')
+            t = serializer.validated_data.get('home_town')
+            a = serializer.validated_data.get('age')
+            # u = user_data(full_name=n, home_town=t, age=a)
+            if n is None:
+                n = self.queryset.filter(pk=pk).values('full_name')
+            if t is None:
+                t = self.queryset.filter(pk=pk).values('home_town')
+            if a is None:
+                a = self.queryset.filter(pk=pk).values('age')
+            user_data.objects.filter(id=pk).update(full_name=n, home_town=t, age=a)
+            message = 'Data Succesfully Updated!'
+            return Response({'message': message})
         else:
-            return Response({'Failed! : Select only a specific data'})
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk=None):
-        if pk is not None:
-            user_data.objects.filter(id=pk).delete()
-            return Response({'SUCCESSFULLY DELETE'})
-        else:
-            return Response({'Failed! : Select only a specific data'})
+        user_data.objects.filter(id=pk).delete()
+        return Response({'SUCCESSFULLY DELETE'})

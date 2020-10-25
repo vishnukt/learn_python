@@ -39,5 +39,5 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('restapi/test/', include(router.urls)),
     path('restapi/test/apiview/', views.UserDataApiView.as_view()),
-    path('restapi/test/apiview/<int:pk>/', views.UserDataApiView.as_view(), name='detail'),
+    path('restapi/test/apiview/<int:pk>/', views.UserDataPutApiView.as_view()),
 ]

@@ -7,9 +7,8 @@ from restapi.api import UserSerializer, GroupSerializer, UserModelSerializer
 from rest_framework.views import APIView
 from user_data.models import user_data
 from rest_framework.authentication import TokenAuthentication
-from restapi import token_permissions
-from rest_framework.settings import api_settings
-from rest_framework.authtoken.views import ObtainAuthToken
+# from restapi import token_permissions
+# from rest_framework.authtoken.views import ObtainAuthToken
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -31,12 +30,12 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 
 class UserDataView(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = (TokenAuthentication,)
+    # permission_classes = (token_permissions.UpdateOwnProfile, )
     queryset = user_data.objects.all()
     # queryset = user_data.objects.filter(user = request.user)
     serializer_class = UserModelSerializer
-    permission_classes = [permissions.IsAuthenticated]
-    # authentication_classes = (TokenAuthentication,)
-    # permission_classes = (token_permissions.UpdateOwnProfile, )
 
     def create(self, request):
         serializer = self.serializer_class(data=request.data)
@@ -86,9 +85,10 @@ class UserDataView(viewsets.ModelViewSet):
 
 
 class UserDataApiView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    # authentication_classes = (TokenAuthentication,)
     queryset = user_data.objects.all()
     serializer_class = UserModelSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, format=None, pk=None):
         queryset = user_data.objects.all()
@@ -121,13 +121,13 @@ class UserDataPutApiView(APIView):
     queryset = user_data.objects.all()
     serializer_class = UserModelSerializer
     permission_classes = [permissions.IsAuthenticated]
-    # authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAuthentication,)
     # permission_classes = (token_permissions.UpdateOwnProfile,)
 
     def get(self, request, format=None, pk=None):
         queryset = user_data.objects.filter(pk=pk)
         serializer_class = UserModelSerializer(queryset, many=True)
-        return Response(serializer_class.data)                
+        return Response(serializer_class.data)
 
     def put(self, request, pk=None):
         serializer = self.serializer_class(data=request.data)
@@ -166,5 +166,5 @@ class UserDataPutApiView(APIView):
         return Response({'SUCCESSFULLY DELETE'})
 
 
-class UserLoginApiView(ObtainAuthToken):
-   renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
+# class UserLoginApiView(ObtainAuthToken):
+#    renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
